@@ -7,11 +7,18 @@ export class Cart {
     @Prop({type: Types.ObjectId, ref: 'User'})
     userId: Types.ObjectId;
 
-    @Prop({type: Types.ObjectId, ref: 'Product'})
-    productId: Types.ObjectId;
-
-    @Prop()
-    quantity: number;
+    @Prop({
+        type: [
+          {
+            productId: { type: String, required: true },
+            quantity: { type: Number, required: true, default: 1 },
+          },
+        ],
+        required: true,
+        default: [],
+      })
+      items: { productId: string; quantity: number }[];
+    
 }
 
 

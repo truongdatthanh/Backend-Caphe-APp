@@ -8,31 +8,22 @@ import { Types } from 'mongoose';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Get("")
-  showCart() {
-    return this.cartService.findAll();
-  }
-     
-  @Post( "/add-to-cart" )
-  addToCart( @Body() createCartDto: CreateCartDto )
-  {
-    return this.cartService.addToCart( createCartDto );
+  @Get('/:userId')
+  async getCart(@Param('userId') userId: string) {
+    return this.cartService.getCart(userId);
   }
 
-  @Get()
-  findAll() {
-    return this.cartService.findAll();
+  @Post('add')
+  async addToCart(
+    @Body('userId') userId: string,
+    @Body('productId') productId: string,
+    @Body('quantity') quantity: number,
+  ) {
+    return this.cartService.addToCart(userId, productId, quantity);
   }
-  
-  @Delete( "/remove/:id" )
-  removeFromCart( @Param( 'id' ) id: string )
-  {
-    return this.cartService.removeFromCart( id );
-  }
-  
-  @Delete( "/clear" )
-  clearCart()
-  {
-    return this.cartService.clearCart();
+
+  @Delete('remove')
+  async removeFromCart(@Body('userId') userId: string, @Body('productId') productId: string) {
+    return this.cartService.removeFromCart(userId, productId);
   }
 }

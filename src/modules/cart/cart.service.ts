@@ -13,31 +13,39 @@ export class CartService {
     @InjectModel( 'Cart' ) private cartModel: Model<Cart>,
   ) {}
   
-  async findAll() {
-    return this.cartModel.find();
+  async getCart(userId: string) {
+    return this.cartModel.findOne({ userId }).exec();
   }
 
-  async addToCart ( createCartDto: CreateCartDto )
-  {
-    let cart = await this.cartModel.findOne( { productId: createCartDto.productId } );
-    if ( isEmpty(cart) )
-    {
-      cart = await this.cartModel.create( createCartDto );
+  async addToCart(userId: string, productId: string, quantity: number) {
+    const cart = await this.cartModel.findOne({ userId });
+
+    if (!cart) {
+      const newCart = new this.cartModel({
+        userId,
+        items: [{ productId, quantity }],
+      });
+      return newCart.save();
     }
-    else
-    {
-      cart.quantity += createCartDto.quantity;
-      cart = await this.cartModel.findByIdAndUpdate( cart._id, cart, { new: true } );
+
+    const itemIndex = cart.items.findIndex((item) => item.productId === productId);
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity += quantity;
+    } else {
+      cart.items.push({ productId, quantity });
     }
+
+    return cart.save();
   }
 
-  async removeFromCart ( id: string )
-  {
-    return this.cartModel.findOneAndDelete( { _id: new Types.ObjectId(id) } );
-  }
+  async removeFromCart(userId: string, productId: string) {
+    const cart = await this.cartModel.findOne({ userId });
 
-  async clearCart ()
-  {
-    return this.cartModel.deleteMany();
+    if (cart) {
+      cart.items = cart.items.filter((item) => item.productId !== productId);
+      return cart.save();
+    }
+
+    return null;
   }
 }
