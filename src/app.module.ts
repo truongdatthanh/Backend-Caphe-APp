@@ -8,6 +8,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { CartModule } from './modules/cart/cart.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { GoogleStrategy } from 'strategies/google.strategy';
 
 
 
@@ -34,7 +35,7 @@ import { AuthModule } from './modules/auth/auth.module';
   
   
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy],
 
   
 })
