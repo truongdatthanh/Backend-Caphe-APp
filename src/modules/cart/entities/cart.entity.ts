@@ -17,7 +17,10 @@ export class Cart {
         required: true,
         default: [],
       })
-      items: { productId: string; quantity: number }[];
+  items: { productId: string; quantity: number }[];
+  
+  @Prop({default: true})
+  status: boolean;
     
 }
 

@@ -11,4 +11,7 @@ export class CreateCartDto
 
     @Min(1)
     quantity: number;
+
+    @IsNotEmpty()
+    status: boolean;
 }

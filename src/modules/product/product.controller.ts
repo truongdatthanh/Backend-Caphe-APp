@@ -41,4 +41,16 @@ export class ProductController {
     return this.productService.getProductByCategory(categoryId);
   }
 
+  @Get( '/get-product-by-name/:name' )
+  getProductByName ( @Param( 'name' ) name: string )
+  {
+    return this.productService.getProductByNames( name );
+  }
+
+  @Get( '/get-product-by-id/:id' )
+  getProductById ( @Param( 'id' ) id: Types.ObjectId )
+  {
+    return this.productService.findOne( id );
+  }
+
 }

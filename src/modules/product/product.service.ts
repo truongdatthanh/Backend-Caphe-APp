@@ -49,4 +49,11 @@ export class ProductService {
     const product = await this.productModel.findById(id);
     return product;
   }
+
+  async getProductByNames ( names: string )
+  {
+    const products = await this.productModel.find( { name: names });
+    console.log( products );
+    return products;
+  }
 }
